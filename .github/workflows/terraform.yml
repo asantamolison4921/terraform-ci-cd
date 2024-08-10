@@ -36,7 +36,7 @@ jobs:
   #      if: github.event_name == 'pull_request' && github.event.action == 'closed'
   #      run: terraform destroy -var="core_count=1" -var="thread_count=2" -auto-approve
 
-#  destroy:
+  destroy:
     name: Terraform Destroy
     runs-on: ubuntu-latest
     env:
