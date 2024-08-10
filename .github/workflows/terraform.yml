@@ -16,7 +16,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-    permissions: read-all
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -31,8 +31,8 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -var="core_count=1" -var="thread_count=2"
       - name: Apply Terraform (on push to main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -var="core_count=1" -var="thread_count=2" -auto-approve
-
   destroy:
     name: Terraform Destroy
     runs-on: ubuntu-latest
@@ -40,9 +40,9 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-    permissions: read-all
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
